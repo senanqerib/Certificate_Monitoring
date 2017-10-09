@@ -26,7 +26,8 @@ public class ReadCert {
     public static void main(String [] args) throws Exception {
      ReadCert RC = new ReadCert();
      
-     RC.Read_PEM_DER_Cert("d:\\104623\\104623.pem");
+    // RC.Read_PEM_DER_Cert("d:\\104623\\104623.pem");
+     RC.Read_JKS("d:\\cert.jks", "123456");
 
  }
     // Certificate file extensions: *.pem, *.der, *.cer, *.crt
@@ -48,7 +49,7 @@ public class ReadCert {
          }
        catch( CertificateException e)
        {
-       System.out.println(e);
+       System.out.println(e.toString());
        }
  }      
       
@@ -77,6 +78,7 @@ public class ReadCert {
             }
         } 
         catch (IOException | KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException | CertificateException e) {
+        System.out.println(e.toString());
         }
 
     }
@@ -105,4 +107,28 @@ public void Read_PKCS7_Cert(String cert_file) throws FileNotFoundException, Cert
       System.out.println(th.toString());
   }
  }
+
+
+public void Read_JKS(String file_name, String keypass)
+{
+try {
+        KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
+        keystore.load(new FileInputStream(file_name), keypass.toCharArray());
+        Enumeration<String> aliases = keystore.aliases();
+        while(aliases.hasMoreElements()){
+            String alias = aliases.nextElement();
+            if(keystore.getCertificate(alias).getType().equals("X.509")){
+                System.out.println(alias + " expires " + ((X509Certificate) keystore.getCertificate(alias)).getNotAfter());
+                System.out.println("signalg: " + ((X509Certificate) keystore.getCertificate(alias)).getSigAlgName());
+                /*
+                .....
+                */
+
+            }
+        }
+    } catch (IOException | KeyStoreException | NoSuchAlgorithmException | CertificateException e) {
+        System.out.println(e.toString());
+    }
 }
+}
+
