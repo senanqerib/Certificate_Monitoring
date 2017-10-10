@@ -108,7 +108,7 @@ public void Read_PKCS7_Cert(String cert_file) throws FileNotFoundException, Cert
   }
  }
 
-
+// Certificate file extensions: *.jks (Java keystore)
 public void Read_JKS(String file_name, String keypass)
 {
 try {
